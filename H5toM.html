@@ -1,0 +1,103 @@
+<html>
+
+<head>
+    <title>小程序</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <script>
+        window.onerror = e => {
+            console.error(e)
+            alert('发生错误' + e)
+        }
+    </script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script> -->
+    <!-- weui 样式 -->
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.4.1/weui.min.css">
+    </link>
+    <style>
+        .weui-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #tips {
+            font-size: 40px;
+            color: black;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="tips" class="weui-btn"></div>
+    <a id="public-web-jump-button" href="javascript:" class="weui-btn weui-btn_primary weui-btn_loading"
+        onclick="openWx()">
+        <span id="public-web-jump-button-loading" class="weui-primary-loading_transparent"><i
+                class="weui-primary-loading__dot"></i></span>
+        打开小程序
+    </a>
+</body>
+
+</html>
+<script>
+    /**
+* [获取URL中的参数名及参数值的集合]
+* 示例URL:http://htmlJsTest/getrequest.html?uid=admin&rid=1&fid=2&name=小明
+* @param {[string]} urlStr [当该参数不为空的时候，则解析该url中的参数集合]
+* @return {[string]}       [参数集合]
+*/
+    function getRequest(urlStr = "") {
+        // console.log(location.search)
+        var url = ""
+        if (urlStr == "") {
+            url = decodeURI(location.search); //获取url中"?"符后的字符串
+        } else {
+            url = "?" + urlStr.split("?")[1];
+        }
+        var theRequest = new Object();
+        var strs = ""
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+    var queryT = getRequest().t
+    //校验游览器
+    function isWxBrowser() {
+        var ua = navigator.userAgent.toLowerCase();
+        let isWx = ua.match(/MicroMessenger/i) == "micromessenger";
+        if (!isWx) {
+            if (ua.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|IEMobile)/i)) {
+                return 'mobile'
+            }
+            return 'pc';
+        } else {
+            let isWxWork = ua.match(/WxWork/i) == "wxwork";
+            if (isWxWork) {
+                return 'wxwork';
+            } else {
+                return 'wx';
+            }
+        }
+    }
+    var browserType = isWxBrowser()
+    var elemTips = document.getElementById('tips')
+    var btn = document.getElementById('public-web-jump-button')
+    if (browserType != 'mobile' || !queryT) {
+        elemTips.innerText = queryT ? '请在手机游览器中打开' : '缺少必要参数'
+        btn.style.display = 'none'
+    }
+    function openWx() {
+        location.href = 'weixin://dl/business/?t=' + queryT
+    }
+    window.onload = function () {
+        openWx()
+    }
+</script>
