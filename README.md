@@ -1,12 +1,12 @@
-# H5toM.html 文件只支持手机游览器打开小程序
-# H5ToMinWechat.html 文件多做了微信游览器打开小程序 当然配置也需要更多
+# 官方公告 https://developers.weixin.qq.com/community/develop/doc/000aeab88a4ea0c5c89d81fde5b801?blockType=1
+# 2022 年 4 月 11 日起 小程序自 2022 年 4 月 11 日起，URL Scheme 和 URL Link （以下统称为 “链接” ）接口能力进行了调整，调整后本项目的游览器打开小程序将无法使用，用户访问的链接必须由接口返回
 
+## 更具新新规则给出如下三种方法
 
-## H5toM.html 打开小程序的配置
-1. 只需要讲生成的 生成小程序URL Scheme ![](https://i.postimg.cc/xdR6bKdB/image.png) 
-2. 然后将生成的t值传入[![image.png](https://i.postimg.cc/W3cJjKjv/image.png)](https://postimg.cc/cKTJBFr9)
-3. 最后将H5toM.html服务器url后拼接上生成的t即可 
-4. 例：http://10.04.36.159:8080/H5toM.html?t=asdcdes (举例只是显示格式无法跳转请更具实际情况配置)
+1. 先生成好URL Scheme 或 URL Link  然后每个用户发一条（一天限制50万条）
+2. 后端先生成好一个唯一标识发给用户 然后通过这个唯一标识去做校验 返回URL Scheme 或 URL Link（可以保证五十万用户打开）（微信方案1：每个用户发送不同链接）
+ 这两个方案可以 防止刷接口
+3. 前端做游览器缓存（可能会被刷接口）（微信方案2：每个用户发送相同链接）
+# H5ToMinWechat.html 中的微信中打开可以继续使用
 
-## H5ToMinWechat.html 打开小程序的配置
-* 此配置比较复杂，需要替换文件中的 replace 参数标记的位置（建议全文见搜索替换）
+# 后面有时间本项目会实现方法3
